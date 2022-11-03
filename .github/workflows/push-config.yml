@@ -1,0 +1,22 @@
+name: push-config
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
+      - run: |
+          for valuesfile in ./values-*.yml
+          do 
+            echo "Processing $valuesfile file...";
+            ytt -f hello-app-bundle/config \
+            -f hello-app-bundle/.imgpkg/images.yml \
+            --data-values-file overlay-small.yml \
+            --data-values-file $valuesfile \
+            | kbld -f- \
+            > final-$valuesfile;
+            git add final-$valuesfile;
+          done
+      - run: git commit -m "update"; git push

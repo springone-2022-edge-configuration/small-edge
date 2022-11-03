@@ -1,0 +1,8 @@
+namespace:
+  name: sicilia
+  #! Set to null to omit Namespace resource
+  owner: "true"
+
+helloApp:
+  name: hello-friends
+  message: "Sicilia!!"
