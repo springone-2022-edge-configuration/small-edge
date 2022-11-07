@@ -6,17 +6,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
-      - run: |
-          for valuesfile in ./values-*.yml
+      - name: Download imgpkg bundle
+        run: imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
+      - name: Apply ytt transformation
+        run: |
+          for valuesfile in ./values/*.yml
           do 
             echo "Processing $valuesfile file...";
             ytt -f hello-app-bundle/config \
             -f hello-app-bundle/.imgpkg/images.yml \
-            --data-values-file overlay-small.yml \
+            -f overlay-small.yml \
             --data-values-file $valuesfile \
             | kbld -f- \
-            > final-$valuesfile;
-            git add final-$valuesfile;
+            > edges/$(basename $valuesfile);
           done
-      - run: git commit -m "update"; git push
+      - name: Pushes yaml to edge repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'edges'
+          destination-github-username: 'springone-2022-edge-configuration'
+          destination-repository-name: 'small-edge-sicilia'
+          user-email: mbrodi@vmware.com
+          target-branch: main
+          commit-message: "update"
