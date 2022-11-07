@@ -15,13 +15,16 @@ jobs:
           imgpkg version
           ytt version
       - name: Download imgpkg bundle
-        run: /home/runner/work/small-edge/small-edge/local-bin/imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
+        run: |
+          export PATH=/home/runner/work/small-edge/small-edge/local-bin/:$PATH
+          imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
       - name: Apply ytt transformation
         run: |
+          export PATH=/home/runner/work/small-edge/small-edge/local-bin/:$PATH
           for valuesfile in ./values/*.yml
           do 
             echo "Processing $valuesfile file...";
-            /home/runner/work/small-edge/small-edge/local-bin/ytt -f hello-app-bundle/config \
+            ytt -f hello-app-bundle/config \
             -f hello-app-bundle/.imgpkg/images.yml \
             -f overlays/overlay-small.yml \
             --data-values-file $valuesfile \
