@@ -23,7 +23,7 @@ jobs:
             echo "Processing $valuesfile file...";
             /home/runner/work/small-edge/small-edge/local-bin/ytt -f hello-app-bundle/config \
             -f hello-app-bundle/.imgpkg/images.yml \
-            -f overlay-small.yml \
+            -f overlays/overlay-small.yml \
             --data-values-file $valuesfile \
             | kbld -f- \
             > edges/$(basename $valuesfile);
