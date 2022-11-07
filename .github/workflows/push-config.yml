@@ -10,10 +10,10 @@ jobs:
         run: |
           mkdir local-bin/
           curl -L https://carvel.dev/install.sh | K14SIO_INSTALL_BIN_DIR=local-bin bash 
-          imgpkg version
-          ytt version
           export PATH=$PWD/local-bin/:$PATH
           echo $PATH
+          imgpkg version
+          ytt version
       - name: Download imgpkg bundle
         run: /home/runner/work/small-edge/small-edge/local-bin/imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
       - name: Apply ytt transformation
