@@ -11,7 +11,6 @@ jobs:
           mkdir local-bin/
           curl -L https://carvel.dev/install.sh | K14SIO_INSTALL_BIN_DIR=local-bin bash 
           imgpkg version
-          curl -L https://carvel.dev/install.sh | K14SIO_INSTALL_BIN_DIR=local-bin bash
           ytt version
           export PATH=$PWD/local-bin/:$PATH
           echo $PATH
