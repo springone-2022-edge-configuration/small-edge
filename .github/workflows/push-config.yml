@@ -8,8 +8,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install packages
         run: |
-          brew tap vmware-tanzu/carvel
-          brew install imgpkg
+          mkdir local-bin/
+          curl -L https://carvel.dev/install.sh | K14SIO_INSTALL_BIN_DIR=local-bin bash 
+          export PATH=$PWD/local-bin/:$PATH
           imgpkg version
       - name: Download imgpkg bundle
         run: imgpkg pull -b marygabry1508/hello-app-bundle:v1.0.0 -o hello-app-bundle
