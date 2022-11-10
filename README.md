@@ -11,8 +11,9 @@ ytt -f temp/hello-app-bundle/config \
 > temp/hello-friends.yml
 
 TODO:
-- cache carvel packages installation
+- use gitregistry
+- push the imgpkg of the final yaml to the regitry
 - pass env var between jobs
+- cache carvel packages installation
 - not commit the final yaml to git
-- push the imgpkg of teh final yaml to the regitry
 - 
