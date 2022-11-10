@@ -31,14 +31,22 @@ jobs:
             | kbld -f- \
             > edges/$(basename $valuesfile);
           done
-      - name: Pushes yaml to edge repo
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: 'edges'
-          destination-github-username: 'springone-2022-edge-configuration'
-          destination-repository-name: 'small-edge-sicilia'
-          user-email: mbrodi@vmware.com
-          target-branch: main
-          commit-message: "update"
+#      - name: Pushes yaml to edge repo
+#        uses: cpina/github-action-push-to-another-repository@main
+#        env:
+#          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+#        with:
+#          source-directory: 'edges'
+#          destination-github-username: 'springone-2022-edge-configuration'
+#          destination-repository-name: 'small-edge-sicilia'
+#          user-email: mbrodi@vmware.com
+#          target-branch: main
+#          commit-message: "update"
+      - name: Create imgpkg
+        run: |
+          for valuesfile in ./edges/*.yml
+          do 
+            tag= $(basename $valuesfile .yml)
+            imgpkg --registry-username ${{ github.actor }} --registry-password ${{ secrets.GITHUB_TOKEN }} push -b ${{ env.REGISTRY }}:$tag -f $valuesfile
+          done
+          
